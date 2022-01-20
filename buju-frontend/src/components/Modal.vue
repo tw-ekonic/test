@@ -11,8 +11,8 @@
           {{ label }}
         </label>
         <div class="flex flex-row">
-          <input v-if="modalObject.endpoint !== 'results'" v-on:input="onChange" v-bind:value="modalObject.data.name" class="shadow appearance-none border rounded w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" v-bind:placeholder="modalObject.placeholder">
-          <input v-if="modalObject.endpoint === 'results'" v-on:input="onChange" v-bind:value="modalObject.data.score" class="shadow appearance-none border rounded w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" v-bind:placeholder="modalObject.placeholder">
+          <input v-if="modalObject.endpoint !== 'scores'" v-on:input="onChange" v-bind:value="modalObject.data.name" class="shadow appearance-none border rounded w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" v-bind:placeholder="modalObject.placeholder">
+          <input v-if="modalObject.endpoint === 'scores'" v-on:input="onChange" v-bind:value="modalObject.data.score" class="shadow appearance-none border rounded w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" v-bind:placeholder="modalObject.placeholder">
           <div v-if="modalObject.endpoint === 'stations'" class="relative w-2/4">
             <select v-on:change="changeSelectedStationValue" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
               <option :selected="selectedStationValue === 'Sekunden'"> Sekunden </option>

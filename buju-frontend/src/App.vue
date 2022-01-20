@@ -1,7 +1,7 @@
 <template>
   <div class="w-10/12 m-auto my-20">
     <div class="flex justify-between flex-row flex-wrap">
-      <StudentsTable class="w-5/12"
+      <StudentsTable class="w-full"
                      v-bind:on-input-change="onInputChange"
                      v-bind:delete-student="deleteStudent"
                      v-bind:students="students"
@@ -10,7 +10,7 @@
                      v-bind:toggle-modal="openModal"
                      v-bind:on-search="onSearch"
       />
-      <StationsTable class="w-5/12"
+      <StationsTable class="w-full"
                      v-bind:on-input-change="onInputChange"
                      v-bind:delete-station="deleteStation"
                      v-bind:stations="stations"
@@ -54,6 +54,7 @@ export default {
   name: 'App',
   data() {
     return {
+      bestResults: [],
       stations: [],
       allStations: [],
       stationName: '',
@@ -74,22 +75,67 @@ export default {
     }
   },
   mounted() {
-    axios.get("http://localhost:3000/users")
+    axios.get("http://localhost:8000/api/users")
         .then((students) => {
           this.students = students.data.users;
           this.allStudents = this.students;
         })
         .catch((e) => console.log(e));
-    axios.get("http://localhost:3000/stations")
+    axios.get("http://localhost:8000/api/stations")
         .then((stations) => {
           this.stations = stations.data.stations;
           this.allStations = this.stations;
         })
         .catch((e) => console.log(e));
-    axios.get("http://localhost:3000/scores")
+    axios.get("http://localhost:8000/api/scores")
         .then((results) => {
           this.results = results.data.scores;
+
+/*          if(this.bestResults.length === 0){
+            this.bestResults.push(this.results[0]);
+          }
+
+          this.results.forEach((result) => {
+
+            const stationId = result.station.id;
+
+            this.bestResults.forEach((bestResult, index) => {
+              if (bestResult.station.id === stationId){
+                const value = bestResult.score;
+
+                if(bestResult.station.value === "Sekunden"){
+                  if(value < result.score){
+                    this.bestResults.splice(index, 1);
+                    this.bestResults.push(result);
+                  } else if (value === result.score){
+                    this.bestResults.push(result)
+                  }
+                } else if (bestResult.station.value === "Meter"){
+                  if(value > result.score){
+                    this.bestResults.splice(index, 1);
+                    this.bestResults.push(result);
+                  } else if (value === result.score){
+                    this.bestResults.push(result)
+                  }
+                }
+              } else this.bestResults.push(result);
+            })
+          })
+          const bestResults = [];
           console.log(this.results);
+          this.results.forEach((result) => {
+
+          })*/
+/*          this.results.forEach((result) => {
+            this.bestResults.forEach((bestRes) => {
+              if (bestRes.score < result.score && bestRes.station.id === result.station.id && bestRes.station.value === "Sekunden") {
+                bestResults.push(result);
+              } else if (bestRes.score > result.score && bestRes.station.id === result.station.id && bestRes.station.value === "Meter") {
+                bestResults.push(result);
+              }
+            })
+          })*/
+
         })
         .catch((e) => console.log(e));
   },
@@ -99,23 +145,23 @@ export default {
     },
     onSubmit(endpoint, name, type) {
       if (endpoint === "stations" && this[name].length) {
-        axios.post(`http://localhost:3000/${endpoint}`, {
+        axios.post(`http://localhost:8000/api/${endpoint}`, {
           name: this[name],
           value: this.selectedStationValue,
         })
             .then(() => {
               this[name] = '';
-              axios.get(`http://localhost:3000/${ endpoint }`)
+              axios.get(`http://localhost:8000/api/${ endpoint }`)
                   .then((data) => this[type] = data.data[endpoint]);
             })
       }
       else if (this[name].length) {
-        axios.post(`http://localhost:3000/${endpoint}`, {
+        axios.post(`http://localhost:8000/api/${endpoint}`, {
           name: this[name],
         })
             .then(() => {
               this[name] = '';
-              axios.get(`http://localhost:3000/${ endpoint }`)
+              axios.get(`http://localhost:8000/api/${ endpoint }`)
                   .then((data) => this[type] = data.data[endpoint]);
             })
       }
@@ -124,12 +170,12 @@ export default {
       this.selectedStationValue = e.target.value;
     },
     onResultSubmit(result) {
-      axios.post(`http://localhost:3000/scores`, {
+      axios.post(`http://localhost:8000/api/scores`, {
         user_id: result.student,
         station_id: result.station,
         score: result.result,
       }).then(() => {
-        axios.get("http://localhost:3000/scores")
+        axios.get("http://localhost:8000/api/scores")
             .then((results) => {
               this.results = results.data.scores;
             })
@@ -137,19 +183,18 @@ export default {
       })
     },
     deleteResult(id) {
-      axios.delete(`http://localhost:3000/scores/${id}`)
+      axios.delete(`http://localhost:8000/api/scores/${id}`)
           .then((results) => {
             this.results = results.data.scores;
-            console.log(this.results);
           })
           .catch((e) => console.log(e));
     },
     deleteStation(id) {
-      axios.delete(`http://localhost:3000/stations/${id}`)
+      axios.delete(`http://localhost:8000/api/stations/${id}`)
           .then((data) => this.stations = data.data.stations);
     },
     deleteStudent(id) {
-      axios.delete(`http://localhost:3000/users/${id}`)
+      axios.delete(`http://localhost:8000/api/users/${id}`)
           .then((data) => this.students = data.data.users);
     },
     openModal(data, label, placeholder, endpoint, type) {
@@ -167,13 +212,18 @@ export default {
     },
     patchValue(id, newValue, endpoint, type, selectedStationValue) {
       if (newValue.length && endpoint === "stations") {
-        axios.patch(`http://localhost:3000/${endpoint}/${id}`, {
+        axios.patch(`http://localhost:8000/api/${endpoint}/${id}`, {
           name: newValue,
           value: selectedStationValue
         }).then((data) => this[type] = data.data[endpoint])
       }
+      else if (newValue.length && endpoint === "scores") {
+        axios.patch(`http://localhost:8000/api/${endpoint}/${id}`, {
+          score: newValue,
+        }).then((data) => this[type] = data.data[endpoint])
+      }
       else if (newValue.length) {
-        axios.patch(`http://localhost:3000/${endpoint}/${id}`, {
+        axios.patch(`http://localhost:8000/api/${endpoint}/${id}`, {
           name: newValue,
         }).then((data) => this[type] = data.data[endpoint])
       }

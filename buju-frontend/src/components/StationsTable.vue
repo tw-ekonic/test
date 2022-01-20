@@ -5,9 +5,9 @@
       <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
         Station hinzufügen
       </label>
-      <div class="flex flex-row">
-        <input @keyup.enter="onSubmit('stations', 'stationName', 'stations')" v-on:input="onInputChange($event, 'stationName')" v-bind:value="stationName" class="shadow appearance-none border rounded w-2/4 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Name der Station">
-        <div class="relative w-2/4">
+      <div class="flex flex-col">
+        <input @keyup.enter="onSubmit('stations', 'stationName', 'stations')" v-on:input="onInputChange($event, 'stationName')" v-bind:value="stationName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Name der Station">
+        <div class="relative w-full">
         <select v-on:change="selectStationValue" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
           <option disabled selected value> -- Wert wählen -- </option>
           <option> Sekunden </option>

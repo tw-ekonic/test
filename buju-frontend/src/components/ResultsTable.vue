@@ -1,11 +1,11 @@
 <template>
   <h1 class="mt-28 text-3xl mb-10">Ergebnis hinzufügen</h1>
-  <div class="flex  flex-row w-full justify-between">
-    <div class="w-3/12">
+  <div class="flex  flex-col w-full justify-between">
+    <div class="w-full">
       <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
         Schüler
       </label>
-      <div class="flex flex-row">
+      <div class="flex flex-col">
         <div class="w-full">
           <div class="relative">
             <select  v-on:change="selectStudent" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="w-3/12">
+    <div class="w-full">
       <label class="block tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
         Station
       </label>
@@ -66,7 +66,7 @@
         <td class="p-4 border-b">{{ result.station?.name }}</td>
         <td class="p-4 border-b">{{ result.score }}</td>
         <td class="p-4 border-b-2">
-          <svg v-on:click="toggleModal(result, 'Ergebnis bearbeite', 'Ergebniswert', 'results', 'scores')" xmlns="http://www.w3.org/2000/svg" class="h-5 inline mr-4 w-5 cursor-pointer hover:text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg v-on:click="toggleModal(result, 'Ergebnis bearbeiten', 'Ergebniswert', 'scores', 'results')" xmlns="http://www.w3.org/2000/svg" class="h-5 inline mr-4 w-5 cursor-pointer hover:text-green-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
           <svg v-on:click="deleteResult(result.id)" xmlns="http://www.w3.org/2000/svg" class="h-5 inline w-5 cursor-pointer hover:text-red-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
