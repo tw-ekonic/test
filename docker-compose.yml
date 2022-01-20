@@ -4,17 +4,20 @@ version: '3.1'
 services:
 
   nginx:
-    image: nginx:latest
+    image: nginx
     container_name: nginx
+    restart: always
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./:/nginx.conf
     ports:
       - 8000:8000
-      - 443:443
 
   db:
     image: mariadb
     restart: always
+    depends_on:
+      nginx:
+        condition: service_started
     ports:
       - "127.0.0.1:3306:3306"
     environment:
@@ -24,6 +27,9 @@ services:
   adminer:
     image: adminer
     restart: always
+    depends_on:
+      nginx:
+        condition: service_started
     ports:
       - 8080:8080
 
@@ -37,6 +43,8 @@ services:
     depends_on:
       db:
         condition: service_started
+      nginx:
+        condition: service_started
     ports:
     - 3000:3000
     command: bash -c "cd buju-api && npm i && node app.js"
@@ -48,6 +56,9 @@ services:
     volumes:
       - ./:/buju-frontend
     container_name: buju-frontend
+    depends_on:
+      nginx:
+        condition: service_started
     ports:
       - 8081:8081
     command: bash -c "cd buju-frontend && npm i && npm run serve -- --port 8081"

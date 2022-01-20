@@ -42,9 +42,15 @@ router.delete('/:id', (async (req, res) => {
 }))
 
 router.patch('/:id', (async (req, res) => {
-  const patchedStation = await knex("stations").where('id', req.params.id).update({name: req.body.name, value: req.body.value})
-  const stations = await knex("stations");
-  res.send({stations});
+  const patchedScores = await knex("scores").where('id', req.params.id).update({score: req.body.score})
+  const scores = await knex("scores");
+  for (const score of scores) {
+    const user = await knex("users").where("id", score.user_id).first();
+    const station = await knex("stations").where("id", score.station_id).first();
+    score.user = user;
+    score.station = station;
+  }
+  res.send({scores});
 }))
 
 module.exports = router;

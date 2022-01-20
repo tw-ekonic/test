@@ -30,6 +30,7 @@
                   v-bind:on-result-submit="onResultSubmit"
                   v-bind:on-input-change="onInputChange"
                   v-bind:delete-result="deleteResult"
+                  v-bind:toggle-modal="openModal"
     />
     <Modal
         v-if="showModal"
