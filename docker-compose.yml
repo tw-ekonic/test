@@ -35,11 +35,11 @@ services:
   frontend:
     image: node:lts
     restart: always
-    working_dir: /buju-app
+    working_dir: /buju-frontend
     volumes:
-      - ./:/buju-app
-    container_name: buju-app
+      - ./:/buju-frontend
+    container_name: buju-frontend
     ports:
       - 8081:8081
-    command: bash -c "cd buju-app && npm i && npm run serve -- --port 8081"
+    command: bash -c "cd buju-frontend && npm i && npm run serve -- --port 8081"
 
