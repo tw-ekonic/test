@@ -1,0 +1,6 @@
+version: '3.1'
+
+services:
+
+  frontend:
+    command: bash -c "cd buju-frontend && npm i && npm run build -- --port 8081"
